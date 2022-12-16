@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="base.css">
+    <style>
+        html, body{
+            margin:0px;
+        }
+        nav{
+            margin-bottom: 5px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(90deg, #00cc99, #99cc00);
+        }
+    </style> 
+</head>
+<body>
+    <nav>
+        <div><a href="/">Logo</a></div>
+        <div>Search</div>
+        <div>Explore</div>
+        {% if user.is_authenticated %}
+            <div> <a href="/logout/">Log out</a></div>
+        {% else %}
+            <div> <a href="/login/">Log in</a></div>
+        {% endif %}
+    </nav>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong>Message: </strong>{{ message }}
+            <button type="button" class="close" data-dismiss="alert" arial-lable="close">
+                <span arial-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <h4>Hello {{ fName }}</h4>
+    {% endif %}
+
+
+    {% block body %}
+
+    {% endblock %}
+</body>
+</html>

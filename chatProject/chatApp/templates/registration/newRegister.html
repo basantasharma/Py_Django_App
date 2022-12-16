@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+new registered
+{% endblock %}
+
+{% block body %}
+<div>
+    <form action="/startRegistration/" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="fName">First Name</label>
+            <input id="fName" name="fName" placeholder="First Name">
+        </div>
+        <div>
+            <label for="lName">Last Name</label>
+            <input id="lName" name="lName" placeholder="Last Name">
+        </div>
+        <div>
+            <label for="userName">User Name</label>
+            <input id="userName" name="userName" placeholder="User Name">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" placeholder="Email">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Password">
+        </div>
+        <div>
+            <label for="cPassword">Confirm Password</label>
+            <input id="cPassword" name="cPassword" type="password" placeholder="Confirm Password">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+</div>
+{{ data }}
+{% endblock %}

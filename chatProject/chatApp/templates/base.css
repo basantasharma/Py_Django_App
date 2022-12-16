@@ -1,0 +1,10 @@
+body{
+    background: lightcoral;
+}
+nav {
+    margin-bottom: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #00cc99, #99cc00);
+}
