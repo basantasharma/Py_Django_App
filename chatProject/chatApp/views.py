@@ -28,6 +28,9 @@ def logOut(request):
     messages.info(request, "you have been successfully logged out")
     return redirect('home')
 def startLogin(request):
+    if User().is_authenticated:
+        messages.info(request, 'you are already logged in')
+        return redirect('home')
     if request.method == "POST":
         userName = request.POST['userName']
         password = request.POST['password']
@@ -36,7 +39,7 @@ def startLogin(request):
             login(request, user)
             fName = user.first_name
             messages.info(request, "you have been successfully logged In")
-            return render(request, 'index/index.html', {"fName": userName})
+            return render(request, 'index/index.html', {"fName": fName})
         else:
             messages.error(request, "User Name or Password didn't matched.")
             return redirect('home')

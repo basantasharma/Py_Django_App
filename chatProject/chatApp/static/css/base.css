@@ -1,7 +1,12 @@
-body{
-    background: lightcoral;
+html, body{
+    margin:0px;
 }
-nav {
+a{
+    text-decoration: none;
+    color:black;
+}
+
+nav{
     margin-bottom: 5px;
     padding: 10px;
     display: flex;

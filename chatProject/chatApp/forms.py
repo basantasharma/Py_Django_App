@@ -5,4 +5,5 @@ from django.forms import ModelForm
 
 class registrationForms(ModelForm):
     class Meta:
+        model = registrationForm
         fields = ["userName","firstName", "lastName", "email", "password"]
