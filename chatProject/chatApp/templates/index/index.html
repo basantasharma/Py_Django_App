@@ -8,5 +8,15 @@ Index
     <h1>This is Home Page.</h1>
     <P> You can see post and other stuffs here in the home page.</p>
 </div>
-
+{% if user.is_authenticated %}
+    <div>
+        <h4>Hello {{ user.first_name }}</h4>
+    </div>
+    <div>
+        <a>See Friends</a>
+    </div>
+    <div>
+        <a> Chat With Friends</a>
+    </div>
+{% endif %}
 {% endblock %}

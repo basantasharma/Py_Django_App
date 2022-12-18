@@ -8,16 +8,15 @@ Login
     <form action="/startLogin/" method="post">
         {% csrf_token %}
         <div>
-            <label>Username</label>
+            <label for="userName">Username</label>
             <input id="userName" name="userName" placeholder="Username">
         </div>
         <div>
-            <label>Password</label>
+            <label for="password">Password</label>
             <input id="password" name="password" type="password" placeholder="Password">
         </div>
         <button type="submit">Login</button>
     </form>
-    <h4>Don't have account? <a href="/register">Register</a></h4>
+    <h4>Don't have account? <button><a href="/register">Register</a></button></h4>
 </div>
-{{ data }}
 {% endblock %}

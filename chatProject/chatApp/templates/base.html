@@ -14,7 +14,12 @@
 <body>
     <nav>
         <div><a href="/">Logo</a></div>
-        <div>Search</div>
+        <div> 
+            <form action="/search"  method="get">
+                <input id="q" name="q" type="text" placeholder="Search by User Name or Email" value="{{ searched_for }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
         <div>Explore</div>
         {% if user.is_authenticated %}
             <div> <a href="/logout/">Log out</a></div>
@@ -30,9 +35,6 @@
             </button>
         </div>
     {% endfor %}
-    {% if user.is_authenticated %}
-        <h4>Hello {{ user.username }}</h4>
-    {% endif %}
 
 
     {% block body %}

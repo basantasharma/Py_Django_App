@@ -3,6 +3,11 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+
+
+
+from django.db.models import Q
+from django.db import connection
 # from .models import registrationForm
 # from django.views.generic.list import ListView
 # from .forms import registrationForms
@@ -59,3 +64,12 @@ def startRegistration(request):
         else:
             messages.error(request, "Password and Confirm Password doesnot matched")
             return redirect("register")
+def search(request):
+    search_for  = request.GET['q']
+    search_result = findUser(search_for)
+    return render(request, "search/search.html", {
+        'searched_for': search_for,
+        'results': search_result,
+    })
+def findUser(search_for):
+    return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter((Q(username =  search_for) | Q(email = search_for)) )
