@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 
-
 from django.db.models import Q
+# from django.db.models import Q, Sum, Count, Case, Value, When, IntegerField
 from django.db import connection
 # from .models import registrationForm
 # from django.views.generic.list import ListView
@@ -72,4 +72,4 @@ def search(request):
         'results': search_result,
     })
 def findUser(search_for):
-    return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter((Q(username =  search_for) | Q(email = search_for)) )
+    return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(username__contains = search_for) | Q(email__contains = search_for)).exclude(username="admin")

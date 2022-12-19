@@ -3,8 +3,38 @@
 Search
 {% endblock %}
 
+{% block link %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
+{% endblock %}
+
 {% block body %}
-    {% for result in results %}
-        {{ result }}
-    {% endfor %}
+    <h1> Searched Result for "{{ searched_for }}"</h1>
+    <div class="body">
+        <div class="left" ></div>
+        <div class="center">
+            {% for result in results %}
+            <div class="card">
+                <div>
+                    <strong>Username: </strong>{{ result.username }}
+                </div>
+                <div>
+                    <strong>Full Name: </strong>{{ result.first_name }} {{ result.last_name }}
+                </div>
+                <div>
+                    <strong>Email: </strong>{{ result.email }}
+                </div>
+                {% if user.is_authenticated %}
+                <div>
+                    {% if user.id != result.id %}
+                        <input action="" type="submit" value="Add Friend">
+                        <input action="" type="submit" value="Message">
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="right"></div>
+    </div>
 {% endblock %}
