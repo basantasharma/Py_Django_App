@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 # from django.urls import path
-from chatApp import views
+from chatApp import views, authViews
 
 from django.urls import path
 # from chatApp.views import ShowIndex
@@ -24,8 +24,9 @@ urlpatterns = [
     path('', views.showIndex , name='home'),
     path('register/', views.register, name='register'),
     path('login/', views.logIn, name='login'),
-    path('logout/', views.logOut, name='logout'),
+    path('logout/', authViews.logOut, name='logout'),
     path('startLogin/', views.startLogin, name='startLogin'),
     path('startRegistration/', views.startRegistration, name='startRegistration'),
     path('search/', views.search, name='search'),
+    path('addFriend/', authViews.addFriend, name='addFriend'),
 ]

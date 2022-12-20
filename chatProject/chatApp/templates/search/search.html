@@ -27,8 +27,10 @@ Search
                 {% if user.is_authenticated %}
                 <div>
                     {% if user.id != result.id %}
-                        <input action="" type="submit" value="Add Friend">
-                        <input action="" type="submit" value="Message">
+                        <a href="/addFriend/?id={{ result.id }}">Add Friend</a>
+                        <a href="">Message</a>
+                        {% comment %} <input action="/addFriend?id={{ result.id }}" type="submit" value="Add Friend">
+                        <input action="" type="submit" value="Message"> {% endcomment %}
                     {% endif %}
                 </div>
                 {% endif %}

@@ -28,10 +28,7 @@ def register(request):
     return render(request, 'registration/newRegister.html')
 def logIn(request):
     return render(request, 'login/login.html')
-def logOut(request):
-    logout(request)
-    messages.info(request, "you have been successfully logged out")
-    return redirect('home')
+
 def startLogin(request):
     if request.method == "POST":
         userName = request.POST['userName']
@@ -73,3 +70,4 @@ def search(request):
     })
 def findUser(search_for):
     return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(username__contains = search_for) | Q(email__contains = search_for)).exclude(username="admin")
+
