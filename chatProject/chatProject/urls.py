@@ -29,4 +29,5 @@ urlpatterns = [
     path('startRegistration/', views.startRegistration, name='startRegistration'),
     path('search/', views.search, name='search'),
     path('addFriend/', authViews.addFriend, name='addFriend'),
+    path('friends/', authViews.seeFriend, name='addFriend'),
 ]

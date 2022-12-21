@@ -21,8 +21,8 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-        <div>Explore</div>
         {% if user.is_authenticated %}
+            <div><a href="/friends/">Friends</a></div>
             <div> <a href="/logout/">Log out</a></div>
         {% else %}
             <div> <a href="/login/">Log in</a></div>

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import user_friend_requests
 
 
 
@@ -25,7 +27,12 @@ def addFriend(request):
     except User.DoesNotExist:
         friend = None
     if friend is not None:
-        
+        request_save = user_friend_requests(from_users_id = request.user.id, to_users_id = friend_id)
+        request_save.save()
         return HttpResponseRedirect(redirect_url)
     else:
         return HttpResponse('no such friend found')
+
+def seeFriend(request):
+    result = user_friend_requests.objects.all().values("from_users_id", "to_users_id", "is_accepted").filter(from_users_id = request.user.id)
+    return HttpResponse(result)
