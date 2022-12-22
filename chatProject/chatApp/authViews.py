@@ -20,7 +20,7 @@ def logOut(request):
     return redirect('home')
 
 def addFriend(request):
-    redirect_url = request.META.get('HTTP_REFERER', 'home')
+    redirect_url = request.META.get('HTTP_REFERER', '/home')
     friend_id = request.GET['id']
     try:
         friend = User.objects.get(id = friend_id)
@@ -33,6 +33,16 @@ def addFriend(request):
     else:
         return HttpResponse('no such friend found')
 
+# def seeFriend(request):
+#     with connection.cursor() as cursor:
+#         cursor.execute("Select au.id, au.username, au.first_name, au.last_name, au.email FROM auth_user AS au WHERE au.id IN (SELECT fr.to_users_id FROM user_friend_requests AS fr WHERE from_users_id = %s)", [request.user.id])
+#         rows = cursor.fetchall()
+#     return HttpResponse(rows)
+
 def seeFriend(request):
-    result = user_friend_requests.objects.all().values("from_users_id", "to_users_id", "is_accepted").filter(from_users_id = request.user.id)
-    return HttpResponse(result)
+    friends = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(
+        id__in=user_friend_requests.objects.filter(
+            from_users_id= request.user.id
+        ).values('to_users')
+    )
+    return HttpResponse(friends)
