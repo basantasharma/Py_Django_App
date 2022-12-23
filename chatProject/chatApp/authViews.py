@@ -9,8 +9,8 @@ from .models import user_friend_requests
 
 
 
-from django.db import connection
-from django.db.models import Q
+from django.db import connection, models
+from django.db.models import Q, Count, Case, When
 
 
 
@@ -33,16 +33,27 @@ def addFriend(request):
     else:
         return HttpResponse('no such friend found')
 
-# def seeFriend(request):
-#     with connection.cursor() as cursor:
-#         cursor.execute("Select au.id, au.username, au.first_name, au.last_name, au.email FROM auth_user AS au WHERE au.id IN (SELECT fr.to_users_id FROM user_friend_requests AS fr WHERE from_users_id = %s)", [request.user.id])
-#         rows = cursor.fetchall()
-#     return HttpResponse(rows)
-
 def seeFriend(request):
-    friends = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(
-        id__in=user_friend_requests.objects.filter(
-            from_users_id= request.user.id
-        ).values('to_users')
-    )
-    return HttpResponse(friends)
+    with connection.cursor() as cursor:
+        cursor.execute("Select auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = auth_user.id AND user_friend_requests.from_users_id = %s AND auth_user.username != 'admin'", [request.user.id])   # WHERE auth_user.id IN (SELECT fr.to_users_id FROM user_friend_requests AS fr WHERE from_users_id = %s)", [request.user.id])
+        rows = cursor.fetchall()
+    return render(request, 'friend/seeFriend.html', {
+        'friends': rows
+    })
+
+# def seeFriend(request):
+#     # friends = User.objects.select_related('user_friend_requests').filter(from_users_id = request.user.id)
+#     # friends = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(
+#     #     id__in=user_friend_requests.objects.filter(from_users_id= request.user.id).values('to_users_id')
+#     # ).exclude(username= 'admin')
+#     return render(request, 'friend/seeFriend.html', {
+#         'friends': friends
+#     })
+    #return HttpResponse(friends)
+
+def cancleRequest(request):
+    redirect_url = request.META.get('HTTP_REFERER', '/home')
+    of_user = request.GET['id']
+    result = user_friend_requests.objects.filter(Q(to_users_id = of_user) & Q(from_users_id = request.user.id)).delete()
+    #return HttpResponse(result)
+    return HttpResponseRedirect(redirect_url)

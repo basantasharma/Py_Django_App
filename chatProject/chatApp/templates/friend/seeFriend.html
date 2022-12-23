@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+Friends
+{% endblock %}
+
+{% block body %}
+{{ friends }}
+<h1> Friend list</h1>
+<div class="body">
+    <div class="left" ></div>
+    <div class="center">
+        {% for result in friends %}
+                <div class="card">
+                    <div>
+                        <strong>Username: </strong>{{ result.1 }}
+                    </div>
+                    <div>
+                        <strong>Full Name: </strong>{{ result.2 }} {{ result.3 }}
+                    </div>
+                    <div>
+                        <strong>Email: </strong>{{ result.4 }}
+                    </div>
+                    {% if user.is_authenticated %}
+                <div>
+                    {% if result.5 == 0 %}
+                        <a href="/cancleRequest/?id={{ result.0 }}">Cancle Request</a>
+                    {% elif result.5 == 1 %}
+                    <a href="/cancleRequest/?id={{ result.0 }}">Remove Friend</a>
+                        {% comment %} <input action="/addFriend?id={{ result.id }}" type="submit" value="Add Friend">
+                        <input action="" type="submit" value="Message"> {% endcomment %}
+                    {% endif %}
+                        <a href="">Message</a>
+                </div>
+                {% endif %}
+                </div>
+        {% endfor %}
+    </div>
+    <div class="right"></div>
+</div>
+{% endblock %}

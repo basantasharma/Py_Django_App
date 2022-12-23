@@ -30,4 +30,5 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('addFriend/', authViews.addFriend, name='addFriend'),
     path('friends/', authViews.seeFriend, name='addFriend'),
+    path('cancleRequest/', authViews.cancleRequest, name='cancleRequest'),
 ]
