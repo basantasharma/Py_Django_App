@@ -35,24 +35,24 @@ def addFriend(request):
 
 @login_required
 def seeRecievedRequests(request):
-    request_sent_by_others = requestByOthers(request)
+    request_sent_by_others = requestSentByOthers(request)
     return render(request, 'friend/request.html', {
         'request_sent_by_others': request_sent_by_others,
     })
 
 @login_required
 def seeSentRequests(request):
-    request_sent_by_you = requestByYou(request)
+    request_sent_by_you = requestSentByYou(request)
     return render(request, 'friend/request.html', {
         'request_sent_by_you': request_sent_by_you,
     })
 
 
-def requestByOthers(request):
+def requestSentByOthers(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = %s AND user_friend_requests.from_users_id = auth_user.id AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 0", [request.user.id])
         return cursor.fetchall()
-def requestByYou(request):
+def requestSentByYou(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = auth_user.id AND user_friend_requests.from_users_id = %s AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 0", [request.user.id])
         return cursor.fetchall()
@@ -98,7 +98,22 @@ def acceptRequest(request):
 def viewProfile(request):
     redirect_url = request.META.get('HTTP_REFERER', '/')
     user_id  = request.GET['q']
-    user_result = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(id = user_id)).exclude(username="admin")
+    user_result = User.objects.values('id', 'username','first_name', 'last_name', 'email').filter(Q(id = user_id)).exclude(username="admin")
+    # print(user_result[0]['id'])
+    # is_friend = user_friend_requests.objects.filter(Q(to_users_id__in = (request.user.id, user_id)) & Q(from_users_id__in = (request.user.id, user_id)) & Q(is_accepted = 1))
+    # requestSentByUser = user_friend_requests.objects.filter(Q(to_users_id = user_id) & Q(from_users_id = request.user.id) & Q(is_accepted = 0))
+    # requestSentByOther = user_friend_requests.objects.filter(Q(to_users_id = request.user.id) & Q(from_users_id =  user_id) & Q(is_accepted = 0))
+    if user_friend_requests.objects.filter(Q(to_users_id__in = (request.user.id, user_id)) & Q(from_users_id__in = (request.user.id, user_id)) & Q(is_accepted = 1)):
+        status = 1.1
+    elif user_friend_requests.objects.filter(Q(to_users_id = user_id) & Q(from_users_id = request.user.id) & Q(is_accepted = 0)):
+        status = 1.0
+    elif user_friend_requests.objects.filter(Q(to_users_id = request.user.id) & Q(from_users_id =  user_id) & Q(is_accepted = 0)):
+        status = 0.1
+    else:
+        status = 0.0
+
+    
     return render(request, "profile/profile.html", {
         'results': user_result,
+        'status': status
     })

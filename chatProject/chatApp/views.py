@@ -64,13 +64,13 @@ def startRegistration(request):
 def search(request):
     
     search_for  = request.GET['q']
-    search_result = findUser(search_for)
+    search_result = findUser(request, search_for)
     return render(request, "search/search.html", {
         'searched_for': search_for,
         'results': search_result,
     })
-def findUser(search_for):
+def findUser(request, search_for):
     # with connection.cursor() as cursor:
     #     cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON auth_user.username LIKE '%%s%' OR  auth_user.email LIKE '%%s%' ")
-    return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(username__contains = search_for) | Q(email__contains = search_for)).exclude(username="admin")
+    return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(username__contains = search_for) | Q(email__contains = search_for)).exclude(Q(username="admin") | Q(id = request.user.id))
 
