@@ -30,5 +30,10 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('addFriend/', authViews.addFriend, name='addFriend'),
     path('friends/', authViews.seeFriend, name='addFriend'),
-    path('cancleRequest/', authViews.cancleRequest, name='cancleRequest'),
+    path('unFriend/', authViews.unFriend, name='unFriend'),
+    path('cancleRequest/', authViews.unFriend, name='cancleRequest'),
+    path('acceptRequest/', authViews.acceptRequest, name='acceptRequest'),
+    path('profile/', authViews.viewProfile, name='profile'),
+    path('sentRequestes/', authViews.seeSentRequests, name='sentRequestes'),
+    path('recievedRequestes/', authViews.seeRecievedRequests, name='recievedRequestes'),
 ]

@@ -17,9 +17,9 @@
     <nav>
         <div><a href="/">Logo</a></div>
         <div> 
-            <form action="/search"  method="get">
-                <input id="q" name="q" type="text" placeholder="Search by User Name or Email" value="{{ searched_for }}">
-                <button type="submit">Search</button>
+            <form id="searchForm"  action="/search"  method="get">
+                <input id="q" name="q" type="text" placeholder="Search by User Name or Email" value="{{ searched_for }}" required>
+                {% comment %} <button type="submit">Search</button> {% endcomment %}
             </form>
         </div>
         {% if user.is_authenticated %}
@@ -42,5 +42,19 @@
     {% block body %}
 
     {% endblock %}
-</body>
+  <script>
+    let form = document.getElementById('searchForm');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let name = document.getElementById('q').value.trim();
+      if (name === '') {
+        {% comment %} alert('Name is required'); {% endcomment %}
+      } else {
+        // Submit the form
+        document.getElementById('q').value = name
+        form.submit();
+      }
+    });
+  </script>
+  
 </html>

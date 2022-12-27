@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}
+Requests
+{% endblock %}
+
+{% block body %}
+<div class="body">
+    <div class="left" ></div>
+    <div class="center">
+        {% if request_sent_by_others %}
+            {% for result in request_sent_by_others %}
+                <div class="card">
+                    <div>
+                        <strong>Username: </strong><a href="/profile/?q={{ result.0 }}">{{ result.1 }}</a>
+                    </div>
+                    <div>
+                        <strong>Full Name: </strong>{{ result.2 }} {{ result.3 }}
+                    </div>
+                    <div>
+                        <strong>Email: </strong>{{ result.4 }}
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div>
+                        {% if result.5 == 0 %}
+                        <a href="/acceptRequest/?id={{ result.0 }}">Accept Request</a>
+                        <a href="">View Profile</a>
+                        <!--<a href="/cancleRequest/?id={{ result.0 }}">Delete Request</a>-->
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% comment %} {% else %}
+            <h1>No request recieved</h1> {% endcomment %}
+        {% endif %}
+        {% if request_sent_by_you %}
+            {% for result in request_sent_by_you %}
+                <div class="card">
+                    <div>
+                        <strong>Username: </strong><a href="/profile/?q={{ result.0 }}">{{ result.1 }}</a>
+                    </div>
+                    <div>
+                        <strong>Full Name: </strong>{{ result.2 }} {{ result.3 }}
+                    </div>
+                    <div>
+                        <strong>Email: </strong>{{ result.4 }}
+                    </div>
+                    {% if user.is_authenticated %}
+                        <div>
+                            {% if result.5 == 0 %}
+                            <a href="/cancleRequest/?id={{ result.0 }}">Unsend Request</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% comment %} {% else %}
+            <h1>No pending Requestes</h1> {% endcomment %}
+        {% endif %}
+    </div>
+    <div class="right"></div>
+</div>
+{% endblock %}

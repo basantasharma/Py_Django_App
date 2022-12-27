@@ -4,36 +4,41 @@ Friends
 {% endblock %}
 
 {% block body %}
+
+
 {{ friends }}
-<h1> Friend list</h1>
+
+
 <div class="body">
     <div class="left" ></div>
     <div class="center">
+        {% if friends %}
+        {% else %}
+        <h1>No friends found</h1>
+        {% endif %}
         {% for result in friends %}
-                <div class="card">
-                    <div>
-                        <strong>Username: </strong>{{ result.1 }}
-                    </div>
-                    <div>
-                        <strong>Full Name: </strong>{{ result.2 }} {{ result.3 }}
-                    </div>
-                    <div>
-                        <strong>Email: </strong>{{ result.4 }}
-                    </div>
-                    {% if user.is_authenticated %}
+            <div class="card">
                 <div>
-                    {% if result.5 == 0 %}
-                        <a href="/cancleRequest/?id={{ result.0 }}">Cancle Request</a>
-                    {% elif result.5 == 1 %}
-                    <a href="/cancleRequest/?id={{ result.0 }}">Remove Friend</a>
-                        {% comment %} <input action="/addFriend?id={{ result.id }}" type="submit" value="Add Friend">
-                        <input action="" type="submit" value="Message"> {% endcomment %}
+                    <strong>Username: </strong><a href="/profile/?q={{ result.0 }}">{{ result.1 }}</a>
+                </div>
+                <div>
+                    <strong>Full Name: </strong>{{ result.2 }} {{ result.3 }}
+                </div>
+                <div>
+                    <strong>Email: </strong>{{ result.4 }}
+                </div>
+                {% if user.is_authenticated %}
+                <div>
+                    {% if result.5 == 1 %}
+                    <a href="/unFriend/?id={{ result.0 }}">Unfriend</a>
+                    <a href="">Message</a>
                     {% endif %}
-                        <a href="">Message</a>
                 </div>
                 {% endif %}
-                </div>
+            </div>
         {% endfor %}
+        <a href="/sentRequestes">See Sent requestes</a><br>
+        <a href="/recievedRequestes">See Recieved requestes</a>
     </div>
     <div class="right"></div>
 </div>

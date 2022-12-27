@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -28,7 +28,7 @@ def register(request):
     return render(request, 'registration/newRegister.html')
 def logIn(request):
     return render(request, 'login/login.html')
-
+# CSRF verification failed. Request aborted. need to be handled cuz login paachi back gayera pheri login gare error xa 
 def startLogin(request):
     if request.method == "POST":
         userName = request.POST['userName']
@@ -62,6 +62,7 @@ def startRegistration(request):
             messages.error(request, "Password and Confirm Password doesnot matched")
             return redirect("register")
 def search(request):
+    
     search_for  = request.GET['q']
     search_result = findUser(search_for)
     return render(request, "search/search.html", {
@@ -69,5 +70,7 @@ def search(request):
         'results': search_result,
     })
 def findUser(search_for):
+    # with connection.cursor() as cursor:
+    #     cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON auth_user.username LIKE '%%s%' OR  auth_user.email LIKE '%%s%' ")
     return User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(username__contains = search_for) | Q(email__contains = search_for)).exclude(username="admin")
 

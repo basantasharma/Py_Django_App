@@ -13,14 +13,14 @@ from django.db import connection, models
 from django.db.models import Q, Count, Case, When
 
 
-
+@login_required
 def logOut(request):
     logout(request)
     messages.info(request, "you have been successfully logged out")
     return redirect('home')
-
+@login_required
 def addFriend(request):
-    redirect_url = request.META.get('HTTP_REFERER', '/home')
+    redirect_url = request.META.get('HTTP_REFERER', '/')
     friend_id = request.GET['id']
     try:
         friend = User.objects.get(id = friend_id)
@@ -33,27 +33,72 @@ def addFriend(request):
     else:
         return HttpResponse('no such friend found')
 
-def seeFriend(request):
-    with connection.cursor() as cursor:
-        cursor.execute("Select auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = auth_user.id AND user_friend_requests.from_users_id = %s AND auth_user.username != 'admin'", [request.user.id])   # WHERE auth_user.id IN (SELECT fr.to_users_id FROM user_friend_requests AS fr WHERE from_users_id = %s)", [request.user.id])
-        rows = cursor.fetchall()
-    return render(request, 'friend/seeFriend.html', {
-        'friends': rows
+@login_required
+def seeRecievedRequests(request):
+    request_sent_by_others = requestByOthers(request)
+    return render(request, 'friend/request.html', {
+        'request_sent_by_others': request_sent_by_others,
     })
 
-# def seeFriend(request):
-#     # friends = User.objects.select_related('user_friend_requests').filter(from_users_id = request.user.id)
-#     # friends = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(
-#     #     id__in=user_friend_requests.objects.filter(from_users_id= request.user.id).values('to_users_id')
-#     # ).exclude(username= 'admin')
-#     return render(request, 'friend/seeFriend.html', {
-#         'friends': friends
-#     })
-    #return HttpResponse(friends)
+@login_required
+def seeSentRequests(request):
+    request_sent_by_you = requestByYou(request)
+    return render(request, 'friend/request.html', {
+        'request_sent_by_you': request_sent_by_you,
+    })
 
-def cancleRequest(request):
-    redirect_url = request.META.get('HTTP_REFERER', '/home')
+
+def requestByOthers(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = %s AND user_friend_requests.from_users_id = auth_user.id AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 0", [request.user.id])
+        return cursor.fetchall()
+def requestByYou(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id = auth_user.id AND user_friend_requests.from_users_id = %s AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 0", [request.user.id])
+        return cursor.fetchall()
+@login_required
+def seeFriend(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id IN (auth_user.id, %s) AND user_friend_requests.from_users_id IN (%s, auth_user.id) AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 1", [request.user.id, request.user.id])
+        friends = cursor.fetchall()
+    return render(request, 'friend/seeFriend.html', {
+        'friends': friends,
+        
+    })
+@login_required
+def unFriend(request):
+    redirect_url = request.META.get('HTTP_REFERER', '/')
     of_user = request.GET['id']
-    result = user_friend_requests.objects.filter(Q(to_users_id = of_user) & Q(from_users_id = request.user.id)).delete()
-    #return HttpResponse(result)
+    if request_sent_to_user(request, of_user):
+        user_friend_requests.objects.filter(Q(to_users_id = request.user.id) & Q(from_users_id = of_user)).update(is_accepted = 0)
+    else:
+        messages.error(request, "no request found")
     return HttpResponseRedirect(redirect_url)
+@login_required
+def cancleRequest(request):
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    of_user = request.GET['id']
+    if request_sent_by_user(request, of_user):
+        user_friend_requests.objects.filter(Q(to_users_id = of_user) & Q(from_users_id = request.user.id)).delete()
+    else:
+        messages.error(request, "no request found")
+    return HttpResponseRedirect(redirect_url)
+def request_sent_by_user(request, of_user):
+    return user_friend_requests.objects.filter(Q(to_users_id = of_user) & Q(from_users_id = request.user.id))
+def request_sent_to_user(request, of_user):
+    return user_friend_requests.objects.filter(Q(to_users_id = request.user.id) & Q(from_users_id = of_user))
+@login_required
+def acceptRequest(request):
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    of_user = request.GET['id']
+    if request_sent_to_user(request, of_user):
+        user_friend_requests.objects.filter(Q(to_users_id = request.user.id) & Q(from_users_id = of_user)).update(is_accepted = 1)
+    return HttpResponseRedirect(redirect_url)
+@login_required
+def viewProfile(request):
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    user_id  = request.GET['q']
+    user_result = User.objects.all().values('id', 'username','first_name', 'last_name', 'email').filter(Q(id = user_id)).exclude(username="admin")
+    return render(request, "profile/profile.html", {
+        'results': user_result,
+    })

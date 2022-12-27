@@ -1,19 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}
-Search
-{% endblock %}
-
-{% block link %}
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
+Profile
 {% endblock %}
 
 {% block body %}
-    <h1> Searched Result for "{{ searched_for }}"</h1>
-    <div class="body">
-        <div class="left" ></div>
-        <div class="center">
-            {% for result in results %}
+<div class="body">
+    <div class="left" ></div>
+    <div class="center">
+        {% for result in results %}
+            <h1>This is the profile of '{{ result.first_name }} {{ result.last_name }}'</h1>
             <div class="card">
                 <div>
                     <strong>Username: </strong><a href="/profile/?q={{ result.id }}">{{ result.username }}</a>
@@ -24,9 +19,11 @@ Search
                 <div>
                     <strong>Email: </strong>{{ result.email }}
                 </div>
+                {% if user.is_authenticate %}
+                    <a href="#">Add Friend</a>
+                    <a href="">Message</a>
+                {% endif %}
             </div>
-            {% endfor %}
-        </div>
-        <div class="right"></div>
+        {% endfor %}
     </div>
 {% endblock %}
