@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chatApp', '0001_initial'),
+        ("chatApp", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='registrationform',
-            name='email',
+            model_name="registrationform",
+            name="email",
             field=models.CharField(max_length=30, null=True),
         ),
         migrations.AddField(
-            model_name='registrationform',
-            name='password',
-            field=models.CharField(default='Chat@pp123', max_length=50),
+            model_name="registrationform",
+            name="password",
+            field=models.CharField(default="Chat@pp123", max_length=50),
         ),
         migrations.AddField(
-            model_name='registrationform',
-            name='userName',
+            model_name="registrationform",
+            name="userName",
             field=models.CharField(max_length=30, null=True),
         ),
         migrations.AlterField(
-            model_name='registrationform',
-            name='firstName',
+            model_name="registrationform",
+            name="firstName",
             field=models.CharField(max_length=30, null=True),
         ),
         migrations.AlterField(
-            model_name='registrationform',
-            name='lastName',
+            model_name="registrationform",
+            name="lastName",
             field=models.CharField(max_length=30, null=True),
         ),
     ]

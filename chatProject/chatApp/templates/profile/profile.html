@@ -20,14 +20,16 @@ Profile
                     <strong>Email: </strong>{{ result.email }}
                 </div>
                 {% if user.is_authenticated %}
-                    {% if status == 0.0 %}
-                        <a href="#">Add Friend</a>
-                    {% elif status == 1.1 %}
-                        <a href="#">UnFriend</a>
-                    {% elif status == 0.1 %}
-                        <a href="#">Accept Request</a>
-                    {% else %}
-                        <a href="#">Unsend Request</a>
+                    {% if result.id != request.user.id %}
+                        {% if status == 0.0 %}
+                            <a href="#">Add Friend</a>
+                        {% elif status == 1.1 %}
+                            <a href="#">UnFriend</a>
+                        {% elif status == 0.1 %}
+                            <a href="#">Accept Request</a>
+                        {% else %}
+                            <a href="#">Unsend Request</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>

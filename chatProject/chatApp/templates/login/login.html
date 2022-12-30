@@ -7,6 +7,9 @@ Login
 <div>
     <form action="/startLogin/" method="post">
         {% csrf_token %}
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
         <div>
             <label for="userName">Username</label>
             <input id="userName" name="userName" placeholder="Username">
