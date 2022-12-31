@@ -18,14 +18,17 @@
         <div><a href="/">Logo</a></div>
         <div> 
             <form id="searchForm"  action="/search"  method="get">
-                <input id="q" name="q" type="text" placeholder="Search by User Name or Email" value="{{ searched_for }}" required>
+                <input class="search-box" id="q" name="q" type="text" placeholder="Search by Username or Email" value="{{ searched_for }}" required>
                 {% comment %} <button type="submit">Search</button> {% endcomment %}
             </form>
         </div>
         {% if user.is_authenticated %}
-            <div><a href="/friends/">Friends</a></div>
-            {% comment %} <div><a href="#">Profile</a></div> {% endcomment %}
-            <div> <a href="/logout/">Log out</a></div>
+            
+          <div>
+            {% comment %} <a href="#">Profile</a> {% endcomment %}
+            <a href="/friends/">Friends </a>
+            <a href="/logout/">Log out</a>
+            </div>
         {% else %}
             <div> <a href="/login/">Log in</a></div>
         {% endif %}

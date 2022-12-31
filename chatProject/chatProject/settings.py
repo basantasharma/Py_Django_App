@@ -136,3 +136,6 @@ LOGIN_URL = "/login/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SESSION_COOKIE_AGE = 3 * 24 * 60 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

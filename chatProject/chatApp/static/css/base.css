@@ -1,15 +1,34 @@
 html, body{
     margin:0px;
+    background-color: hsl(0, 0%, 10%);
+    color: white;
+    /* background: linear-gradient(90deg, #a9a9a9 , #333333); */
 }
 a{
     text-decoration: none;
-    color:red;
+    color:white;
+}
+.search-box{
+    background-color: hsl(0, 0%, 15%);
+    border-radius: 10px;
+    width: 250px;
+    height: 20px;
+}
+::placeholder{
+    color: white;
+}
+input{
+    color: white;
+    background-color: hsl(0, 0%, 15%);
 }
 
 nav{
+    font-size: 25px;
     margin-bottom: 5px;
-    padding: 10px;
+    padding: 5px;
     display: flex;
     justify-content: space-between;
-    background: linear-gradient(90deg, #00cc99, #99cc00);
+    background-color: hsl(0, 0%, 15%);
+    /* background: linear-gradient(90deg, #a9a9a9 , #303030 ); */
+    /* background: linear-gradient(90deg, #1010ff, #ff1010); */
 }
