@@ -50,7 +50,7 @@ def startLogin(request):
                     "home"
                 )  # render(request, 'index/index.html', {"fName": fName})
         else:
-            messages.error(request, "User Name or Password didn't matched.")
+            messages.error(request, "Username or Password didn't matched.")
             return redirect(redirect_url)
     else:
         # messages.error(request, "need to login to access this page")

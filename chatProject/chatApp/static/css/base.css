@@ -1,4 +1,5 @@
 html, body{
+    font-family: 'Kalam', sans-serif;
     margin:0px;
     background-color: hsl(0, 0%, 10%);
     color: white;
@@ -6,13 +7,19 @@ html, body{
 }
 a{
     text-decoration: none;
+    padding: 5px;
     color:white;
 }
 .search-box{
+    border-color: hsl(0, 0%, 10%);
     background-color: hsl(0, 0%, 15%);
-    border-radius: 10px;
-    width: 250px;
-    height: 20px;
+    border-radius: 100px;
+    width: 500px;
+    height: 30px;
+}
+.search-box:focus{
+    border: none;
+    
 }
 ::placeholder{
     color: white;
@@ -25,8 +32,9 @@ input{
 nav{
     font-size: 25px;
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 10px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     background-color: hsl(0, 0%, 15%);
     /* background: linear-gradient(90deg, #a9a9a9 , #303030 ); */
