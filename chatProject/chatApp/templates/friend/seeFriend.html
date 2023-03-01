@@ -3,10 +3,14 @@
 Friends
 {% endblock %}
 
+{% block link %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/seeFriend.css' %}">
+{% endblock %}
+
 {% block body %}
 <div class="body">
-    <div class="left" ></div>
-    <div class="center">
+    <div class="left" >
         {% if friends %}
         {% else %}
         <h1>No friends found</h1>
@@ -35,6 +39,8 @@ Friends
         <a href="/sentRequestes">See Sent requestes</a><br>
         <a href="/recievedRequestes">See Recieved requestes</a>
     </div>
-    <div class="right"></div>
+    <div class="center">
+        message
+    </div>
 </div>
 {% endblock %}

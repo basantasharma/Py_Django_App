@@ -1,0 +1,11 @@
+.body{
+    display: flex;
+    justify-content: space-between;
+}
+.card{
+    padding: 5px;
+    margin: 10px;
+    display: grid;
+    border:2px solid black;
+    justify-content: space-between;
+}
