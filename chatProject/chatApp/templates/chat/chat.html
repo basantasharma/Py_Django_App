@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}
+Chat
+{% endblock %}
+
+
+{% block body %}
+    This is chat room.
+    <input id="Smessage" required>
+    <button type="submit" onclick="sendMessage()">Send</button>
+    <button type="submit" onclick="closeConnection()">Close connection</button>
+    <div id="message"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+    function sendMessage(){
+        let messageToSend = document.getElementById('Smessage').value;
+        chat_url.send('did you tried to send message?');
+        document.getElementById('message').innerHTML = messageToSend;
+    }
+    function closeConnection(){
+        chat_url.close();
+    }
+    let chat_url = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/ac/'
+    );
+
+    chat_url.onopen  = function(e){
+        console.log('Web socket connection opened')
+        chat_url.send('hi, this is console message on open using send')
+    }
+
+    chat_url.onmessage = function (e) {
+        document.getElementById('message').innerHTML = e['data']
+        console.log('this is onMessage ', e)
+    }
+    chat_url.onclose = function(e){
+        console.log('this is onclose', e)
+    }
+    chat_url.onerror = function(e){
+        console.log('this is onerror', e)
+    }
+</script>
+{% endblock %}

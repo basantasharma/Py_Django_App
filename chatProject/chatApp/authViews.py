@@ -116,7 +116,8 @@ def unFriend(request):
             Q(to_users_id=request.user.id) & Q(from_users_id=of_user)
         ).update(is_accepted=0)
     else:
-        messages.error(request, "no request found")
+        cancleRequest(request)
+        #messages.error(request, "no request found")
     return HttpResponseRedirect(redirect_url)
 
 
@@ -177,3 +178,6 @@ def viewProfile(request):
     return render(
         request, "profile/profile.html", {"results": user_result, "status": status}
     )
+@login_required
+def chat(request):
+    return render(request, 'chat/chat.html')

@@ -47,13 +47,16 @@
     {% block body %}
 
     {% endblock %}
+    {% block scripts %}
+
+    {% endblock %}
   <script>
     let form = document.getElementById('searchForm');
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       let name = document.getElementById('q').value.trim();
       if (name === '') {
-        {% comment %} alert('Name is required'); {% endcomment %}
+        // alert('Name is required');
       } else {
         // Submit the form
         document.getElementById('q').value = name

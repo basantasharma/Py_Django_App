@@ -22,13 +22,13 @@ Profile
                 {% if user.is_authenticated %}
                     {% if result.id != request.user.id %}
                         {% if status == 0.0 %}
-                            <a href="#">Add Friend</a>
+                            <a href="/addFriend/?id={{ result.id }}">Add Friend</a>
                         {% elif status == 1.1 %}
-                            <a href="#">UnFriend</a>
+                            <a href="/unFriend/?id={{ result.id }}">UnFriend</a>
                         {% elif status == 0.1 %}
-                            <a href="#">Accept Request</a>
+                            <a href="/acceptRequest/?id={{ result.id }}">Accept Request</a>
                         {% else %}
-                            <a href="#">Unsend Request</a>
+                            <a href="/cancleRequest/?id={{ result.id }}">Unsend Request</a>
                         {% endif %}
                     {% endif %}
                 {% endif %}

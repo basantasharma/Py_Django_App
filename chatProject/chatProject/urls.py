@@ -16,7 +16,7 @@ Including another URLconf
 # from django.urls import path
 from chatApp import authViews, views
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # from chatApp.views import ShowIndex
 urlpatterns = [
@@ -36,4 +36,6 @@ urlpatterns = [
     path("profile/", authViews.viewProfile, name="profile"),
     path("sentRequestes/", authViews.seeSentRequests, name="sentRequestes"),
     path("recievedRequestes/", authViews.seeRecievedRequests, name="recievedRequestes"),
+    path("chat/", authViews.chat, name="chat"),
+    #path("ws/sc/", include('chatApp.urlsWebsocket')),
 ]
