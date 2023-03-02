@@ -92,12 +92,7 @@ def request_sent_to_user(request, of_user):
 
 @login_required
 def seeFriend(request):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id IN (auth_user.id, %s) AND user_friend_requests.from_users_id IN (%s, auth_user.id) AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 1",
-            [request.user.id, request.user.id],
-        )
-        friends = cursor.fetchall()
+    friends = listFriend(request)
     return render(
         request,
         "friend/seeFriend.html",
@@ -105,7 +100,14 @@ def seeFriend(request):
             "friends": friends,
         },
     )
-
+def listFriend(request):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT auth_user.id, auth_user.username, auth_user.first_name, auth_user.last_name, auth_user.email, user_friend_requests.is_accepted FROM auth_user INNER JOIN user_friend_requests ON user_friend_requests.to_users_id IN (auth_user.id, %s) AND user_friend_requests.from_users_id IN (%s, auth_user.id) AND auth_user.username != 'admin' AND user_friend_requests.is_accepted = 1",
+            [request.user.id, request.user.id],
+        )
+        return cursor.fetchall()
+    
 
 @login_required
 def unFriend(request):
@@ -180,4 +182,11 @@ def viewProfile(request):
     )
 @login_required
 def chat(request):
-    return render(request, 'chat/chat.html')
+    friends = listFriend(request)
+    return render(
+        request,
+        "chat/chat.html",
+        {
+            "friends": friends,
+        },
+    )

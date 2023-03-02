@@ -5,7 +5,21 @@ Chat
 
 {% block body %}
 <div style="display: flex; justify-content:space-between;">
-    <div>Friends</div>
+    <div>Friends
+        {% comment %} {% if friends %}
+        {% else %}
+        <h1>No friends found</h1>
+        {% endif %} {% endcomment %}
+        {% for result in friends %}
+            <div class="card">
+                <div>
+                    <strong>Full Name: </strong><a href="#" onclick="">{{ result.2 }} {{ result.3 }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
     <div style="border:2px solid white; width:100%; height:100%; min-height:450px; max-width:450px; display:block; ">here message<br>
         <input id="MessageToSend" placeholder="Enter message"><button type="submit">Send</button>
     </div>
