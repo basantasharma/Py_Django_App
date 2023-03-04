@@ -7,11 +7,24 @@ Chat
 
 {% block body %}
 <div id='messageArea'></div>
+<input id="messageToSend"><button onclick="sendMessage()" id="send">Send</button>
 {% endblock %}
 {% block scripts %}
 <script>
     const socket = new WebSocket('ws://'+window.location.host+'/ws/ac/');
+    function sendMessage(){
+        if(document.getElementById("messageToSend").value == ""){
+           return;
+        }
+        else{
 
+            let message = document.getElementById("messageToSend").value;
+            let mesdiv = document.createElement('span');
+            mesdiv.innerHTML = message+"<br>";
+            document.getElementById("messageArea").appendChild(mesdiv);
+            document.getElementById("messageToSend").value = "";
+        }
+    }
 socket.addEventListener('open', () => {
   console.log('WebSocket connection opened');
 });
