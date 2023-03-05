@@ -189,4 +189,17 @@ def chat(request):
         {
             "friends": friends,
         },
+        # "chat/chat.html",
+        # {
+        #     "friends": friends,
+        # },
+    )
+@login_required
+def room(request, room_name):
+    return render(
+        request, 
+        "chat/room.html", 
+        {
+            "room_name": room_name
+        },
     )

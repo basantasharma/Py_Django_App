@@ -37,5 +37,6 @@ urlpatterns = [
     path("sentRequestes/", authViews.seeSentRequests, name="sentRequestes"),
     path("recievedRequestes/", authViews.seeRecievedRequests, name="recievedRequestes"),
     path("chat/", authViews.chat, name="chat"),
+    path("chat/<str:room_name>/", authViews.room, name="room"),
     #path("ws/sc/", include('chatApp.urlsWebsocket')),
 ]
