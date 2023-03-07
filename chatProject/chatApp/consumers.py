@@ -1,5 +1,7 @@
 from channels.consumer import AsyncConsumer, SyncConsumer
 from channels.exceptions import StopConsumer
+import json
+from channels.generic.websocket import WebsocketConsumer, AsyncJsonWebsocketConsumer
 #from channels.generic.websocket import AsyncJsonWebsocketConsumer
 # class mySyncConsumer(SyncConsumer):
 #     def websocket_connect(self, event):
@@ -39,3 +41,17 @@ class myAsyncConsumer(AsyncConsumer):
     async def websocket_disconnect(self, event):
         print("disconnected asyc basanta", event)
         raise StopConsumer()
+
+
+class ChatConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+
+    def disconnect(self, close_code):
+        pass
+
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
+
+        self.send(text_data=json.dumps({"message": message}))

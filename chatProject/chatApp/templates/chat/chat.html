@@ -9,12 +9,12 @@ Chat
 What chat room would you like to enter?<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
-<div id='messageArea'></div>
-<input id="messageToSend"><button onclick="sendMessage()" id="send">Send</button>
+{% comment %} <div id='messageArea'></div>
+<input id="messageToSend"><button onclick="sendMessage()" id="send">Send</button> {% endcomment %}
 {% endblock %}
 {% block scripts %}
 <script>
-    const socket = new WebSocket('ws://'+window.location.host+'/ws/ac/');
+    {% comment %} const socket = new WebSocket('ws://'+window.location.host+'/ws/ac/');
     function sendMessage(){
         if(document.getElementById("messageToSend").value == ""){
            return;
@@ -42,7 +42,7 @@ socket.addEventListener('close', () => {
 
 socket.addEventListener('error', (error) => {
   console.error('WebSocket error:', error);
-});
+}); {% endcomment %}
 document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
