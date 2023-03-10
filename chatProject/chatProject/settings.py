@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "channels",
+    "redis",
     "daphne",
     "django.contrib.admin",
     "django.contrib.auth",

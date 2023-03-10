@@ -9,40 +9,9 @@ Chat
 What chat room would you like to enter?<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
-{% comment %} <div id='messageArea'></div>
-<input id="messageToSend"><button onclick="sendMessage()" id="send">Send</button> {% endcomment %}
 {% endblock %}
 {% block scripts %}
 <script>
-    {% comment %} const socket = new WebSocket('ws://'+window.location.host+'/ws/ac/');
-    function sendMessage(){
-        if(document.getElementById("messageToSend").value == ""){
-           return;
-        }
-        else{
-            let message = document.getElementById("messageToSend").value;
-            let mesdiv = document.createElement('span');
-            mesdiv.innerHTML = message+"<br>";
-            document.getElementById("messageArea").appendChild(mesdiv);
-            document.getElementById("messageToSend").value = "";
-            socket.send(message);
-        }
-    }
-socket.addEventListener('open', () => {
-  console.log('WebSocket connection opened');
-});
-
-socket.addEventListener('message', (event) => {
-  console.log('Received message:', event.data);
-});
-
-socket.addEventListener('close', () => {
-  console.log('WebSocket connection closed');
-});
-
-socket.addEventListener('error', (error) => {
-  console.error('WebSocket error:', error);
-}); {% endcomment %}
 document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
@@ -56,73 +25,3 @@ document.querySelector('#room-name-input').focus();
         };
 </script>
 {% endblock %}
-{% comment %} {% block body %}
-<div style="display: flex; justify-content:space-between;">
-    <div>Friends
-        {% if friends %}
-        {% else %}
-        <h1>No friends found</h1>
-        {% endif %}
-        {% for result in friends %}
-            <div class="card">
-                <div>
-                    <strong>Full Name: </strong><a href="#" onclick="">{{ result.2 }} {{ result.3 }}</a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
-
-    <div style="border:2px solid white; width:100%; height:100%; min-height:450px; max-width:450px; display:block; ">here message<br>
-        <input id="MessageToSend" placeholder="Enter message"><button type="submit">Send</button>
-    </div>
-    <div></div>
-</div>
-{% endblock %} {% endcomment %}
-
-
-
-
-
-
-{% comment %} 
-{% block body %}
-    This is chat room.
-    <input id="Smessage" required>
-    <button type="submit" onclick="sendMessage()">Send</button>
-    <button type="submit" onclick="closeConnection()">Close connection</button>
-    <div id="message"></div>
-{% endblock %}
-{% block scripts %}
-<script>
-    function sendMessage(){
-        let messageToSend = document.getElementById('Smessage').value;
-        chat_url.send('did you tried to send message?');
-        document.getElementById('message').innerHTML = messageToSend;
-    }
-    function closeConnection(){
-        chat_url.close();
-    }
-    let chat_url = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/ac/'
-    );
-
-    chat_url.onopen  = function(e){
-        console.log('Web socket connection opened')
-        chat_url.send('hi, this is console message on open using send')
-    }
-
-    chat_url.onmessage = function (e) {
-        document.getElementById('message').innerHTML = e['data']
-        console.log('this is onMessage ', e)
-    }
-    chat_url.onclose = function(e){
-        console.log('this is onclose', e)
-    }
-    chat_url.onerror = function(e){
-        console.log('this is onerror', e)
-    }
-</script>
-{% endblock %} {% endcomment %}
