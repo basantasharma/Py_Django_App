@@ -6,6 +6,22 @@ Chat
 
 
 {% block body %}
+<div>
+    <div>Friends
+        {% if friends %}
+        {% else %}
+        <h1>No friends found</h1>
+        {% endif %}
+        {% for result in friends %}
+            <div class="card">
+                <div>
+                    <strong>Full Name: </strong><a href="/chat/121221{{ result.0 }}" onclick="">{{ result.2 }} {{ result.3 }}</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
 What chat room would you like to enter?<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">

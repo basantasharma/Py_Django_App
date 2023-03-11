@@ -5,23 +5,7 @@ from channels.generic.websocket import WebsocketConsumer, AsyncJsonWebsocketCons
 #from channels.generic.websocket import AsyncWebsocketConsumer
 #from asgiref.sync import async_to_sync
 #from channels.generic.websocket import AsyncJsonWebsocketConsumer
-# class mySyncConsumer(SyncConsumer):
-#     def websocket_connect(self, event):
-#         self.send({
-#             'type': "websocket.accept"
-#             })
-#         print("connected sync", event)
 
-#     def websocket_receive(self, event):
-#         # self.send({
-#         #     "type": "websocket.send",
-#         #     "text": event["text"],
-#         # })
-#         print("recieved sync", event)
-
-#     def websocket_disconnect(self, event):
-#         print("disconnected sync", event)
-#         #raise StopConsumer()
 
 class myAsyncConsumer(AsyncConsumer):
 
@@ -50,6 +34,7 @@ class myAsyncConsumer(AsyncConsumer):
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "chat_%s" % self.room_name
 
