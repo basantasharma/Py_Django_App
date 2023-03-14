@@ -32,39 +32,37 @@ class myAsyncConsumer(AsyncConsumer):
 
 
 
-# class ChatConsumer(AsyncWebsocketConsumer):
-#     async def connect(self):
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
         
-#         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-#         self.room_group_name = "chat_%s" % self.room_name
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = "chat_%s" % self.room_name
 
-#         # Join room group
-#         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        # Join room group
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-#         await self.accept()
+        await self.accept()
 
-#     async def disconnect(self, close_code):
-#         # Leave room group
-#         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+    async def disconnect(self, close_code):
+        # Leave room group
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-#     # Receive message from WebSocket
-#     async def receive(self, text_data):
-#         text_data_json = json.loads(text_data)
-#         message = text_data_json["message"]
+    # Receive message from WebSocket
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
 
-#         # Send message to room group
-#         await self.channel_layer.group_send(
-#             self.room_group_name, {"type": "chat_message", "message": message}
-#         )
+        # Send message to room group
+        await self.channel_layer.group_send(
+            self.room_group_name, {"type": "chat_message", "message": message}
+        )
 
-#     # Receive message from room group
-#     async def chat_message(self, event):
-#         message = event["message"]
+    # Receive message from room group
+    async def chat_message(self, event):
+        message = event["message"]
 
-#         # Send message to WebSocket
-#         await self.send(text_data=json.dumps({"message": message}))
-
-
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({"message": message}))
 
 
 
@@ -74,6 +72,8 @@ class myAsyncConsumer(AsyncConsumer):
 
 
 
+
+######################### SAMPLE FOR BUTTON ACCEPTING AND REJECTING CHAT ROOM ########################################
 
 # class ChatConsumer(AsyncWebsocketConsumer):
 #     async def connect(self):
@@ -146,83 +146,83 @@ class myAsyncConsumer(AsyncConsumer):
 
 
 
+######################## SAMPLE FOR COUNTING NO. OF USERS ########################
+# class ChatConsumer(AsyncWebsocketConsumer):
+#     async def connect(self):
+#         self.room_name = self.scope['url_route']['kwargs']['room_name']
+#         self.room_group_name = f'chat_{self.room_name}'
+#         self.waiting_room_group_name = f'waiting_{self.room_name}'
 
-class ChatConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
-        self.waiting_room_group_name = f'waiting_{self.room_name}'
+#         # Join the waiting room group
+#         await self.channel_layer.group_add(
+#             self.waiting_room_group_name,
+#             self.channel_name,
+#         )
 
-        # Join the waiting room group
-        await self.channel_layer.group_add(
-            self.waiting_room_group_name,
-            self.channel_name,
-        )
+#         # check the number of users in the waiting room
+#         num_users = await self.channel_layer.group_send(
+#             self.waiting_room_group_name,
+#             {
+#                 'type': 'count_users',
+#             },
+#         )
 
-        # check the number of users in the waiting room
-        num_users = await self.channel_layer.group_send(
-            self.waiting_room_group_name,
-            {
-                'type': 'count_users',
-            },
-        )
+#         # if there is only one user in the waiting room, send a waiting message
+#         if num_users == 1:
+#             await self.send(text_data=json.dumps({
+#                 'message': 'Waiting for more users to join...',
+#             }))
 
-        # if there is only one user in the waiting room, send a waiting message
-        if num_users == 1:
-            await self.send(text_data=json.dumps({
-                'message': 'Waiting for more users to join...',
-            }))
+#         # if there are at least two users in the waiting room, move them to the chat room
+#         elif num_users >= 2:
+#             # remove users from the waiting room
+#             await self.channel_layer.group_discard(
+#                 self.waiting_room_group_name,
+#                 self.channel_name,
+#             )
+#             # join users to the chat room
+#             await self.channel_layer.group_add(
+#                 self.room_group_name,
+#                 self.channel_name,
+#             )
+#             await self.accept()
 
-        # if there are at least two users in the waiting room, move them to the chat room
-        elif num_users >= 2:
-            # remove users from the waiting room
-            await self.channel_layer.group_discard(
-                self.waiting_room_group_name,
-                self.channel_name,
-            )
-            # join users to the chat room
-            await self.channel_layer.group_add(
-                self.room_group_name,
-                self.channel_name,
-            )
-            await self.accept()
+#     async def disconnect(self, close_code):
+#         # Leave the waiting room group
+#         await self.channel_layer.group_discard(
+#             self.waiting_room_group_name,
+#             self.channel_name,
+#         )
 
-    async def disconnect(self, close_code):
-        # Leave the waiting room group
-        await self.channel_layer.group_discard(
-            self.waiting_room_group_name,
-            self.channel_name,
-        )
+#         # Leave the chat room group
+#         await self.channel_layer.group_discard(
+#             self.room_group_name,
+#             self.channel_name,
+#         )
 
-        # Leave the chat room group
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name,
-        )
+#     async def receive(self, text_data):
+#         text_data_json = json.loads(text_data)
+#         message = text_data_json['message']
 
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+#         # Send message to room group
+#         await self.channel_layer.group_send(
+#             self.room_group_name,
+#             {
+#                 'type': 'chat_message',
+#                 'message': message,
+#             },
+#         )
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-            },
-        )
+#     async def chat_message(self, event):
+#         message = event['message']
 
-    async def chat_message(self, event):
-        message = event['message']
+#         # Send message to WebSocket
+#         await self.send(text_data=json.dumps({
+#             'message': message,
+#         }))
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message,
-        }))
-
-    async def count_users(self, event):
-        num_users = len(await self.channel_layer.group_channel_layer(
-            self.waiting_room_group_name
-        ).group_channels(self.waiting_room_group_name))
-        return num_users
+#     async def count_users(self, event):
+#         num_users = len(await self.channel_layer.group_channel_layer(
+#             self.waiting_room_group_name
+#         ).group_channels(self.waiting_room_group_name))
+#         return num_users

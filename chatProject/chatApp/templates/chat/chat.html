@@ -6,19 +6,26 @@ Chat
 
 
 {% block body %}
-<div>
-    <div>Friends
-        {% if friends %}
-        {% else %}
-        <h1>No friends found</h1>
-        {% endif %}
-        {% for result in friends %}
-            <div class="card">
-                <div>
-                    <strong>Full Name: </strong><a href="/chat/121221{{ result.0 }}" onclick="">{{ result.2 }} {{ result.3 }}</a>
+<div style="display:flex; justify-content:space-between;">
+    <div>
+        <div>Friends
+            {% if friends %}
+            {% else %}
+            <h1>No friends found</h1>
+            {% endif %}
+            {% for result in friends %}
+                <div class="card">
+                    <div>
+                        <strong>Full Name: </strong><a href="/chat/121221{{ result.0 }}" onclick="">{{ result.2 }} {{ result.3 }}</a>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div id='joining'>
+            joining room please wait..
+        </div>
     </div>
 </div>
 
@@ -28,6 +35,7 @@ What chat room would you like to enter?<br>
 {% endblock %}
 {% block scripts %}
 <script>
+    //document.getElementById('joining')
 document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
@@ -37,6 +45,8 @@ document.querySelector('#room-name-input').focus();
 
         document.querySelector('#room-name-submit').onclick = function(e) {
             var roomName = document.querySelector('#room-name-input').value;
+            //some working function call for waiting lobby should be written here
+            
             
             window.location.pathname = '/chat/' + roomName + '/';
         };
