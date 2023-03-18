@@ -24,7 +24,7 @@ a{
 ::placeholder{
     color: white;
 }
-input{
+input, textarea{
     color: white;
     background-color: hsl(0, 0%, 15%);
 }

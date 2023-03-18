@@ -23,7 +23,13 @@ Chat
         </div>
     </div>
     <div>
-        <div id='joining'>
+        <div id='joining' hidden>
+            <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+            <input id="chat-message-input" type="text" size="100"><br>
+            <input id="chat-message-submit" type="button" value="Send">
+            <button id="accept" >Accept</button>
+            <button id="leave" >Leave</button>
+    {{ room_name|json_script:"room-name" }}
             joining room please wait..
         </div>
     </div>
@@ -47,8 +53,8 @@ document.querySelector('#room-name-input').focus();
             var roomName = document.querySelector('#room-name-input').value;
             //some working function call for waiting lobby should be written here
             
-            
-            window.location.pathname = '/chat/' + roomName + '/';
+
+            //window.location.pathname = '/chat/' + roomName + '/';
         };
 </script>
 {% endblock %}
